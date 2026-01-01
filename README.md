@@ -44,7 +44,7 @@ If you don't find clustershell in EPEL, you may be able to download rpm here:
 
 Next, download and extract the cluster-validation package with a command like this:
 
-    curl -L -o cluster-validation.tgz http://github.com/MapRPS/cluster-validation/tarball/master
+    curl -L -o cluster-validation.tgz http://github.com/nightzone/cluster-validation/tarball/custom
 
 Extract with tar in /root or your home folder and rename the top level folder like this:  
 

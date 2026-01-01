@@ -67,7 +67,7 @@ setvars() {
    #taskset="taskset -c "
    #tmpfile=$(mktemp); trap "rm $tmpfile; echo EXIT sigspec: $?; exit" EXIT
    if [[ $(id -u) != 0 ]]; then
-      ssh() { /usr/bin/ssh -l root "$@"; }
+      ssh() { /usr/bin/ssh -l $USER "$@"; }
    fi
 }
 setvars
