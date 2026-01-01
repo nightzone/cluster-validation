@@ -42,15 +42,19 @@ http://clustershell.readthedocs.org/en/latest/tools/clush.html
 If you don't find clustershell in EPEL, you may be able to download rpm here:
 `http://mirror.math.princeton.edu/pub/epel/6/x86_64/clustershell-1.7.2-1.el6.noarch.rpm`
 
+Create cluster-validation directory
+
+    clush -ab "mkdir ~/cluster-validation"
+
 Next, download and extract the cluster-validation package with a command like this:
 
+    cd ~/cluster-validation
     curl -L -o cluster-validation.tgz http://github.com/nightzone/cluster-validation/tarball/custom
 
-Extract with tar in /root or your home folder and rename the top level folder like this:  
+Extract with tar in your home folder and rename the top level folder like this:  
 
-    mv jbenninghoff-cluster-validation-* cluster-validation
-    or
-    mv cluster-validation-* cluster-validation
+    tar -xzvf cluster-validation.tgz
+    mv nightzone-cluster-validation-<code>/* ./
 
 Copy the cluster-validation folder to all nodes in the cluster.  The
 clush command simplifies this:
@@ -63,7 +67,7 @@ Step 1 : Gather Base Audit Information
 Run cluster-audit.sh as root to verify that all nodes have met the
 MapR installation requirements.  Run:
 
-    cd /root/cluster-validation/
+    cd /home/mapr/cluster-validation/
     pre-install/cluster-audit.sh | tee cluster-audit.log
 
 Run those commands on the node where clush has been installed and
@@ -90,15 +94,18 @@ network-test.sh script can be manually defined as well.  There are
 command line options for sequential mode and to run iperf as well.
 Run:
 
-    cd /root/cluster-validation/
+    cd /home/mapr/cluster-validation/
     pre-install/network-test.sh | tee network-test.log
 
 Run those commands on the node where clush has been installed and
 configured.  Expect about 90% of peak bandwidth for either 1GbE or
 10GbE networks:
 
-	1 GbE  ==>  ~115 MB/sec 
-	10 GbE ==> ~1150 MB/sec
+	  1 GbE ==>   ~115 MB/sec 
+	 10 GbE ==>  ~1150 MB/sec
+     25 GbE ==>  ~3125 MB/sec
+     40 GbE ==>  ~5000 MB/sec
+    100 GbE ==> ~12500 MB/sec
 
 Step 3 : Evaluate Raw Memory Performance
 ----------------------------------------
