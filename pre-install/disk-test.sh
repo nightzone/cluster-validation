@@ -88,6 +88,8 @@ find_unused_disks() {
          #Looks like something has device open
          lsof $dev && continue
       fi
+      # If devise is ubuntu loop device, skip device
+      [[ $dev == *loop* ]] && continue
       ## Survived all filters, add device to the list of unused disks!!
       disklist="$disklist $dev "
    done
@@ -153,26 +155,25 @@ case "$diskset" in
       [[ -n "$DBG" ]] && read -p "Press enter to continue or ctrl-c to abort"
       if [[ -n "$disklist" ]]; then
          echo; echo "Unused disks: $disklist"
-         [[ -t 1 ]] && { tput -S <<< $'setab 3\nsetaf 0'; }
-         echo -n Scrutinize this list carefully!!
+         [[ -t 1 ]] && { tput setab 3 setaf 0; }
+         echo -n "Scrutinize this list carefully!!"
          [[ -t 1 ]] && tput op
          echo
-         #echo -e "\033[33;5;7mScrutinize this list carefully!!\033[0m"
       else
          echo; echo "No Unused disks!"; echo; exit 1
       fi
-: << '--BLOCK-COMMENT--'
-      diskqty=$(echo $disklist | wc -w)
-      #See /opt/mapr/conf/mfs.conf: mfs.max.disks
-      #TBD: add smartctl disk detail probes
-      if type smartctl >& /dev/null; then
-         grepopts='-e ^Vendor -e ^Product -e Capacity -e ^Rotation '
-         grepopts+=' -e ^Form -e ^Transport'
-         smartctl -d megaraid,0 -a /dev/sdf | grep $grepopts
-      elif [[ -f /opt/MegaRAID/MegaCLI ]]; then
-         /opt/MegaRAID/MegaCLI ...
-      fi
---BLOCK-COMMENT--
+# : << '--BLOCK-COMMENT--'
+#       diskqty=$(echo $disklist | wc -w)
+#       #See /opt/mapr/conf/mfs.conf: mfs.max.disks
+#       #TBD: add smartctl disk detail probes
+#       if type smartctl >& /dev/null; then
+#          grepopts='-e ^Vendor -e ^Product -e Capacity -e ^Rotation '
+#          grepopts+=' -e ^Form -e ^Transport'
+#          smartctl -d megaraid,0 -a /dev/sdf | grep $grepopts
+#       elif [[ -f /opt/MegaRAID/MegaCLI ]]; then
+#          /opt/MegaRAID/MegaCLI ...
+#       fi
+# --BLOCK-COMMENT--
       ;;
 esac
 
@@ -200,7 +201,7 @@ case "$testtype" in
       ;;
    destroy)
       [[ -n "$DBG" ]] && set -x
-      if service mapr-warden status; then
+      if [[ $(service mapr-warden status | grep Active | grep running) ]]; then
          echo 'MapR warden appears to be running'
          echo 'Stop warden (e.g. service mapr-warden stop)'
          exit

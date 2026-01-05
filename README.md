@@ -37,10 +37,9 @@ Compare results with:
     clush -ab date
 
 Complete documentation for clush and clustershell can be found here:
-http://clustershell.readthedocs.org/en/latest/tools/clush.html
+https://clustershell.readthedocs.org/en/latest/tools/clush.html
 
-If you don't find clustershell in EPEL, you may be able to download rpm here:
-`http://mirror.math.princeton.edu/pub/epel/6/x86_64/clustershell-1.7.2-1.el6.noarch.rpm`
+It's better to download lates version of clustershell that supports -m option to configure sudo mode
 
 Create cluster-validation directory
 
@@ -49,7 +48,7 @@ Create cluster-validation directory
 Next, download and extract the cluster-validation package with a command like this:
 
     cd ~/cluster-validation
-    curl -L -o cluster-validation.tgz http://github.com/nightzone/cluster-validation/tarball/custom
+    curl -L -o cluster-validation.tgz https://github.com/nightzone/cluster-validation/tarball/custom
 
 Extract with tar in your home folder and rename the top level folder like this:  
 
@@ -67,7 +66,7 @@ Step 1 : Gather Base Audit Information
 Run cluster-audit.sh as root to verify that all nodes have met the
 MapR installation requirements.  Run:
 
-    cd /home/mapr/cluster-validation/
+    cd ~/cluster-validation/
     pre-install/cluster-audit.sh | tee cluster-audit.log
 
 Run those commands on the node where clush has been installed and
@@ -143,7 +142,7 @@ to run the destructive IOzone tests on all unused disks.
 
 The test can be run in parallel on all nodes with clush:
 
-    cd /root/cluster-validation/
+    cd ~/cluster-validation/
     clush -ab "$PWD/pre-install/disk-test.sh"
     clush -ab "$PWD/pre-install/summIOzone.sh"
 
@@ -159,6 +158,13 @@ of nodes and disks there is a summIOzone.sh script that can help
 provide a summary of disk-test.sh output using clush.
 
     clush -ab /root/cluster-validation/pre-install/summIOzone.sh
+
+Approx drive throughput:  
+```
+HDD:  .2GBps  
+SSD:  .5GBps  
+NVMe: 5GBps  
+```
 
 Complete Pre-Installation Checks
 --------------------------------
